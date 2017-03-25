@@ -48,7 +48,7 @@ public class DestinationFragment extends Fragment {
   public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     elementContainer = (LinearLayout) view.findViewById(R.id.element_container);
     MainActivity.createElements(elementContainer);
-    view.findViewById(R.id.add_button).setOnClickListener(new View.OnClickListener() {
+    view.findViewById(R.id.add_element).setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View button) {
         MainActivity.createElement(elementContainer);

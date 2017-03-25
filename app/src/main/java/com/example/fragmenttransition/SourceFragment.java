@@ -9,6 +9,7 @@ import android.transition.ChangeBounds;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,7 @@ public class SourceFragment extends Fragment {
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    postponeEnterTransition();
     setExitSharedElementCallback(new SharedElementCallback() {
       @Override
       public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
@@ -42,14 +44,23 @@ public class SourceFragment extends Fragment {
   @Nullable
   @Override
   public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-    return inflater.inflate(R.layout.source_fragment, null);
+    final View view = inflater.inflate(R.layout.source_fragment, null);
+    view.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+      @Override
+      public boolean onPreDraw() {
+        view.getViewTreeObserver().removeOnPreDrawListener(this);
+        startPostponedEnterTransition();
+        return true;
+      }
+    });
+    return view;
   }
 
   @Override
   public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     elementContainer = (ViewGroup) getView().findViewById(R.id.element_container);
     MainActivity.createElements(elementContainer);
-    view.findViewById(R.id.add_button).setOnClickListener(new View.OnClickListener() {
+    view.findViewById(R.id.open_destination).setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View button) {
         showDestinationFragment();
