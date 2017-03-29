@@ -75,9 +75,11 @@ public class SourceFragment extends Fragment {
     FragmentTransaction transaction = getFragmentManager().beginTransaction();
     for (int i = 0; i < childCount; i++) {
       View element = elementContainer.getChildAt(i);
-      String transitionName = element.getTransitionName();
-      transaction.addSharedElement(element, transitionName);
+      transaction.addSharedElement(element, element.getTransitionName());
     }
-    transaction.replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
+    transaction.replace(R.id.fragment_container, fragment)
+        .addToBackStack(null)
+        .setAllowOptimization(true)
+        .commit();
   }
 }
