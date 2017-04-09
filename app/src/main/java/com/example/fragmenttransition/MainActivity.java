@@ -1,8 +1,11 @@
 package com.example.fragmenttransition;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.transition.ChangeBounds;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -39,5 +42,22 @@ public class MainActivity extends AppCompatActivity {
     for (int i = 0; i < elementCount; i++) {
       MainActivity.createElement(parent);
     }
+  }
+
+  @Override
+  public void onBackPressed() {
+
+    ViewGroup container = (ViewGroup) findViewById(R.id.element_container);
+    int childCount = container.getChildCount();
+    SourceFragment fragment = new SourceFragment();
+    fragment.setSharedElementEnterTransition(new ChangeBounds());
+    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+    for (int i = 0; i < childCount; i++) {
+      View element = container.getChildAt(i);
+      transaction.addSharedElement(element, element.getTransitionName());
+    }
+    transaction.replace(R.id.fragment_container, fragment)
+        .setAllowOptimization(true)
+        .commit();
   }
 }

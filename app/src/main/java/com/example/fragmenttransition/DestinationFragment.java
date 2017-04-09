@@ -3,40 +3,14 @@ package com.example.fragmenttransition;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.SharedElementCallback;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import java.util.List;
-import java.util.Map;
-
 public class DestinationFragment extends Fragment {
 
   private LinearLayout elementContainer;
-
-  @Override
-  public void onCreate(@Nullable Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setEnterSharedElementCallback(new SharedElementCallback() {
-      @Override
-      public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
-        super.onMapSharedElements(names, sharedElements);
-        int childCount = elementContainer.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-          View element = elementContainer.getChildAt(i);
-          String transitionName = element.getTransitionName();
-          if (!names.contains(transitionName)) {
-            names.add(transitionName);
-          }
-          if (!sharedElements.containsKey(transitionName)) {
-            sharedElements.put(transitionName, element);
-          }
-        }
-      }
-    });
-  }
 
   @Nullable
   @Override

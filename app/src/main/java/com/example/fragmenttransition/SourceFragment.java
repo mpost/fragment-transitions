@@ -4,56 +4,19 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.SharedElementCallback;
 import android.transition.ChangeBounds;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-
-import java.util.List;
-import java.util.Map;
 
 public class SourceFragment extends Fragment {
 
   private ViewGroup elementContainer;
 
-  @Override
-  public void onCreate(@Nullable Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    postponeEnterTransition();
-    setExitSharedElementCallback(new SharedElementCallback() {
-      @Override
-      public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
-        super.onMapSharedElements(names, sharedElements);
-        int childCount = elementContainer.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-          View view = elementContainer.getChildAt(i);
-          String transitionName = view.getTransitionName();
-          if (!names.contains(transitionName)) {
-            names.add(transitionName);
-          }
-          if (!sharedElements.containsKey(transitionName)) {
-            sharedElements.put(transitionName, view);
-          }
-        }
-      }
-    });
-  }
-
   @Nullable
   @Override
   public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-    final View view = inflater.inflate(R.layout.source_fragment, null);
-    view.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-      @Override
-      public boolean onPreDraw() {
-        view.getViewTreeObserver().removeOnPreDrawListener(this);
-        startPostponedEnterTransition();
-        return true;
-      }
-    });
-    return view;
+    return inflater.inflate(R.layout.source_fragment, null);
   }
 
   @Override
